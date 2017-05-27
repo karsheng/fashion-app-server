@@ -21,6 +21,11 @@ const RecommendationSchema = new Schema({
 	sent: {
 		type: Boolean,
 		default: false
+	},
+	rating: {
+		type: Number,
+		min: [1, 'Minimum value is 1'],
+		max: [3, 'Maximum value is 3']
 	}
 });
 

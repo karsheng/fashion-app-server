@@ -43,6 +43,18 @@ module.exports = {
 			.then(results => res.send(results))
 			.catch(next);
 	},
+	rateRecommendation(req, res, next) {
+		const { rec_id, rating } = req.body;
+
+		Recommendation
+			.findByIdAndUpdate(
+				rec_id,
+				{ rating: rating },
+				{ new: true, runValidators: true }
+			)
+			.then(rec => res.send(rec))
+			.catch(err => next(err.errors['rating']));
+	},
 	getItemsInBag(req, res, next) {
 		const client_id = req.user._id;
 

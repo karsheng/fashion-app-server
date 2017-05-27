@@ -22,6 +22,9 @@ module.exports = function(app) {
 	app.post('/signup', ClientAuthController.signup);
 	
 	app.put('/lookingfor/', clientRequireAuth, ClientController.updateLookingFor);
+
+	app.put('/recommendation', clientRequireAuth, ClientController.rateRecommendation);
+	
 	app.get('/recommendations', clientRequireAuth, ClientController.getRecommendations);
 	app.get('/recommendations/:consultant_id', clientRequireAuth, ClientController.getRecommendationsByConsultantId);
 

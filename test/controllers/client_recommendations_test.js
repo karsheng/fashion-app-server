@@ -13,6 +13,7 @@ describe('Client Controller Get Recommendations', function(done) {
 	var consultant_1, consultant_2, consultant_3, client;
 	var item1, item2, item3, item4;
 	var note1, note2, note3, note4;
+	var rec_id1, rec_id2, rec_id3, rec_id4;
 	beforeEach(done => {
 		Promise.all([
 			createConsultant(), 
@@ -44,6 +45,10 @@ describe('Client Controller Get Recommendations', function(done) {
 					saveRecommendation(consultant_1, client, item4, note4)
 				])
 					.then(rec_ids => {
+						rec_id1 = rec_ids[0];
+						rec_id2 = rec_ids[1];
+						rec_id3 = rec_ids[2];
+						rec_id4 = rec_ids[3];
 						Promise.all([
 							pushRecommendation(consultant_1, rec_ids[0]),
 							pushRecommendation(consultant_2, rec_ids[1]),
@@ -76,7 +81,18 @@ describe('Client Controller Get Recommendations', function(done) {
 				done();
 			});
 	});
+
+	it('PUT to /recommendation rates recommendation', done => {
+		request(app)
+			.put('/recommendation')
+			.set('client-authorization', client.token)
+			.send({
+				rec_id: rec_id1,
+				rating: 2
+			})
+			.end((err, res) => {
+				assert(res.body.rating === 2);
+				done();
+			});
+	});
 });
-
-
-
