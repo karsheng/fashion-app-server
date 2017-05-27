@@ -5,7 +5,8 @@ const app = require('../../app');
 
 const User = mongoose.model('user');
 
-describe('Consultant Authentication Controller', () => {
+describe('Consultant Authentication Controller', function() {
+	this.timeout(15000);
 	it('post to /consultant/signup creates a consultant', (done) => {
 		request(app)
 			.post('/consultant/signup')
