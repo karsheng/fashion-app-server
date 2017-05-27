@@ -1,10 +1,10 @@
 {
-  "name": "runners-server",
+  "name": "peach-server",
   "version": "1.0.0",
-  "description": "runners-server",
+  "description": "peach-server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test nodemon --exec mocha --recursive -R min",
     "dev": "nodemon index.js"
   },
   "author": "",
@@ -13,12 +13,17 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "faker": "^4.1.0",
     "jwt-simple": "^0.5.1",
     "mongoose": "^4.9.5",
     "morgan": "^1.8.1",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "supertest": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.3.0"
   }
 }

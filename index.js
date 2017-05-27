@@ -1,21 +1,5 @@
-// Main starting point of the app
-const express = require('express');
+const app = require('./app');
 const http = require('http');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const app = express();
-const router = require('./router');
-const mongoose = require('mongoose');
-
-// DB Setup
-mongoose.connect('mongodb://localhost:runners/runners');
-
-
-// App Setup
-app.use(morgan('combined')); // morgan is a middleware logging framework 
-app.use(bodyParser.json({ type: '*/*' })); // parse all request to json
-router(app);
-
 
 // Server Setup
 const port = process.env.PORT || 3090;

@@ -1,16 +1,40 @@
-const Authentication = require('./controllers/authentication');
+const ClientAuthController = require('./controllers/client_auth_controller');
+const ClientController = require('./controllers/client_controller');
+
+const ConsultantAuthController = require('./controllers/consultant_auth_controller');
+const ConsultantController = require('./controllers/consultant_controller');
+
 const passportService = require('./services/passport');
 const passport = require('passport');
 
 
-const requireAuth = passport.authenticate('jwt', { session: false });
-const requireSignin = passport.authenticate('local', { session: false });
+const clientRequireAuth = passport.authenticate('client-jwt', { session: false });
+const clientRequireSignin = passport.authenticate('client-local', { session: false });
+const consultantRequireAuth = passport.authenticate('consultant-jwt', { session: false });
+const consultantRequireSignin = passport.authenticate('consultant-local', { session: false });
+
 
 module.exports = function(app) {
-	app.get('/', requireAuth, function(req, res) {
+	app.get('/', function(req, res) {
 		res.send({ hi: 'there' });   
 	});
-	app.post('/signin', requireSignin, Authentication.signin); 
-	app.post('/signup', Authentication.signup);
+	app.post('/signin', clientRequireSignin, ClientAuthController.signin); 
+	app.post('/signup', ClientAuthController.signup);
+	
+	app.put('/lookingfor/', clientRequireAuth, ClientController.updateLookingFor);
+	app.get('/recommendations', clientRequireAuth, ClientController.getRecommendations);
+	app.get('/recommendations/:consultant_id', clientRequireAuth, ClientController.getRecommendationsByConsultantId);
 
+	app.get('/bag', clientRequireAuth, ClientController.getItemsInBag);
+	app.post('/bag', clientRequireAuth, ClientController.addItemToBag);
+	app.put('/bag', clientRequireAuth, ClientController.updateItemInBag);
+	app.delete('/bag', clientRequireAuth, ClientController.removeItemInBag);
+	
+	app.post('/consultant/signin', consultantRequireSignin, ConsultantAuthController.signin); 
+	app.post('/consultant/signup', ConsultantAuthController.signup);
+
+	app.post('/consultant/recommendation', consultantRequireAuth, ConsultantController.saveRecommendation);
+	
+	app.put('/consultant/recommendation/push', consultantRequireAuth, ConsultantController.pushRecommendation);
+	app.put('/consultant/recommendation/pushall', consultantRequireAuth, ConsultantController.pushAllRecommendations);
 };
