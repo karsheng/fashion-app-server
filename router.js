@@ -28,6 +28,8 @@ module.exports = function(app) {
 	app.get('/recommendations', clientRequireAuth, ClientController.getRecommendations);
 	app.get('/recommendations/:consultant_id', clientRequireAuth, ClientController.getRecommendationsByConsultantId);
 
+	app.post('/reviews/:consultant_id', clientRequireAuth, ClientController.postConsultantReview);
+
 	app.get('/bag', clientRequireAuth, ClientController.getItemsInBag);
 	app.post('/bag', clientRequireAuth, ClientController.addItemToBag);
 	app.put('/bag', clientRequireAuth, ClientController.updateItemInBag);

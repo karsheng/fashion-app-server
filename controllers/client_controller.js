@@ -3,6 +3,7 @@ const Client = require('../models/client');
 const Category = require('../models/category');
 const Recommendation = require('../models/recommendation');
 const Bag = require('../models/bag');
+const ConsultantReview = require('../models/consultant-review');
 
 module.exports = {
 	updateLookingFor(req, res, next) {
@@ -106,6 +107,22 @@ module.exports = {
 
 		Bag.findOneAndRemove({ recommendation: rec_id })
 			.then(result => res.send(result))
+			.catch(next);
+	},
+	postConsultantReview(req, res, next) {
+		const client_id = req.user._id;
+		const { consultant_id } = req.params;
+		const { rating, comment } = req.body;
+
+		review = new ConsultantReview({
+			client: client_id,
+			consultant: consultant_id,
+			rating: rating,
+			comment: comment
+		});
+
+		review.save()
+			.then(rev => res.send(rev))
 			.catch(next);
 	}
 };
