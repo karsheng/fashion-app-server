@@ -109,6 +109,14 @@ module.exports = {
 			.then(result => res.send(result))
 			.catch(next);
 	},
+	getConsultantReviews(req, res, next) {
+		const { consultant_id } = req.params;
+		
+		ConsultantReview
+			.find({ consultant: consultant_id })
+			.then(reviews => res.send(reviews))
+			.catch(next);
+	},
 	postConsultantReview(req, res, next) {
 		const client_id = req.user._id;
 		const { consultant_id } = req.params;

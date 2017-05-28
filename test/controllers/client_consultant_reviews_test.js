@@ -5,6 +5,7 @@ const createConsultant = require('../create_consultant_helper');
 const createClient = require('../create_client_helper');
 const mongoose = require('mongoose');
 const ConsultantReview = mongoose.model('consultant-review');
+const postReview = require('../post_review_helper');
 
 describe('Client Controller addItemToBag', function(done) {
 	this.timeout(20000);
@@ -22,7 +23,23 @@ describe('Client Controller addItemToBag', function(done) {
 			});
 	});
 
-	it('POST to /review/:consultant_id saves a review on consultant', done => {
+	it('/GET to /reviews/:consultant_id returns all reviews on consultant', done => {
+		Promise.all([
+				postReview(client, consultant),
+				postReview(client, consultant),
+				postReview(client, consultant)
+			])
+			.then(reviews => {
+				request(app)
+					.get(`/reviews/${consultant._id}`)
+					.end((err, res) => {
+						assert(res.body.length === 3);
+						done();
+					});		
+			});
+	});
+
+	it('POST to /reviews/:consultant_id saves a review on consultant', done => {
 		request(app)
 			.post(`/reviews/${consultant._id}`)
 			.set('client-authorization', client.token)
@@ -39,7 +56,7 @@ describe('Client Controller addItemToBag', function(done) {
 			});
 	});
 
-	it('DELETE to /review/:consultant_id removes a review on consultant', done => {
+	it('DELETE to /reviews/:consultant_id removes a review on consultant', done => {
 		request(app)
 			.post(`/reviews/${consultant._id}`)
 			.set('client-authorization', client.token)

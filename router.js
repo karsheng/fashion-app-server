@@ -28,6 +28,7 @@ module.exports = function(app) {
 	app.get('/recommendations', clientRequireAuth, ClientController.getRecommendations);
 	app.get('/recommendations/:consultant_id', clientRequireAuth, ClientController.getRecommendationsByConsultantId);
 
+	app.get('/reviews/:consultant_id', ClientController.getConsultantReviews);
 	app.post('/reviews/:consultant_id', clientRequireAuth, ClientController.postConsultantReview);
 	app.delete('/reviews/:consultant_id', clientRequireAuth, ClientController.removeConsultantReview);
 
