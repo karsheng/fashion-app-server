@@ -124,5 +124,14 @@ module.exports = {
 		review.save()
 			.then(rev => res.send(rev))
 			.catch(next);
+	},
+	removeConsultantReview(req, res, next) {
+		const client_id = req.user._id;
+		const { review_id } = req.body;		
+
+		ConsultantReview
+			.findOneAndRemove({ $and: [{ client: client_id }, { _id: review_id }] })		
+			.then(review => res.send(review))
+			.catch(next);
 	}
 };
