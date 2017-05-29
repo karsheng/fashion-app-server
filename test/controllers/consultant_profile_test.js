@@ -2,16 +2,31 @@ const assert = require('assert');
 const request = require('supertest');
 const app = require('../../app');
 const CreateConsultant = require('../create_consultant_helper');
+const CreateClient = require('../create_client_helper');
+const postReview = require('../post_review_helper');
 
 describe('Consultant Controller Profile', function() {
 	this.timeout(15000);
-	var consultant;
+	var consultant, client;
 
 	beforeEach(done => {
 		CreateConsultant()
 			.then(con => {
 				consultant = con;
-				done();
+				CreateClient()
+					.then(cli => {
+						client = cli;
+						postReview(client, consultant, 3)
+							.then(() => {
+								postReview(client, consultant, 4)
+									.then(() => {
+										postReview(client, consultant, 5)
+											.then(() => {
+												done();		
+											});
+									});
+							});	
+					});
 			});
 	});
 
@@ -39,8 +54,9 @@ describe('Consultant Controller Profile', function() {
 						assert(con.profile.name === consultant.name);
 						assert(con.profile.username === consultant.username);
 						assert(con.description === 'I am super consultant!');
+						assert(con.rating === 4);
 						done();
 					})
 			});
-	})
+	});
 });

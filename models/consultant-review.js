@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Consultant = require('./consultant');
 
 const ConsultantReviewSchema = new Schema({
 	client: {
@@ -24,6 +25,32 @@ const ConsultantReviewSchema = new Schema({
 
 ConsultantReviewSchema.set('validateBeforeSave', true);
 
+ConsultantReviewSchema.post('save', function(next) {
+	const review = this;
+	const model = mongoose.model('consultant-review');
+
+	model.aggregate([
+		{ $match: { consultant: review.consultant } },
+
+		{ '$group': 
+			{ _id: review.consultant,
+				'avgRating': {'$avg': '$rating'}
+			}
+		}
+	], function(err, result) {
+		const con = result[0];
+		Consultant
+			.findOneAndUpdate(
+				{ profile: con._id }, 
+				{ rating: con.avgRating },
+				{ new: true }
+			)
+			.then(next)
+			.catch(next);
+	});
+});
+
 const ConsultantReview = mongoose.model('consultant-review', ConsultantReviewSchema);
+
 
 module.exports = ConsultantReview;

@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const ConsultantReview = mongoose.model('consultant-review');
 const postReview = require('../post_review_helper');
 
-describe.only('Client Controller addItemToBag', function(done) {
+describe('Client Controller addItemToBag', function(done) {
 	this.timeout(20000);
 	var consultant, client;
 
