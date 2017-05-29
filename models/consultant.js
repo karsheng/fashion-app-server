@@ -8,6 +8,9 @@ const ConsultantSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'user',
 		required: true
+	},
+	description: {
+		type: String
 	}
 });
 

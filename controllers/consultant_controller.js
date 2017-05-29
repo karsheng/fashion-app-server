@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Recommendation = require('../models/recommendation');
+const Consultant = require('../models/consultant');
 
 module.exports = {
 	saveRecommendation(req, res, next) {
@@ -35,6 +36,18 @@ module.exports = {
 
 		const timeSent = new Date().getTime();
 		Recommendation.findByIdAndUpdate(rec_id, { sent: true, timeSent: timeSent })
+		.then(result => res.send(result))
+		.catch(next);
+	},
+	updateProfileDescription(req, res, next) {
+		const consultant_id = req.user._id;
+		const { description } = req.body;
+
+		Consultant.findOneAndUpdate(
+			{ profile: consultant_id },
+			{ description: description },
+			{ new: true }
+		)
 		.then(result => res.send(result))
 		.catch(next);
 	}

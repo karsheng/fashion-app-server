@@ -40,6 +40,8 @@ module.exports = function(app) {
 	app.post('/consultant/signin', consultantRequireSignin, ConsultantAuthController.signin); 
 	app.post('/consultant/signup', ConsultantAuthController.signup);
 
+	app.put('/consultant/profile', consultantRequireAuth, ConsultantController.updateProfileDescription);
+
 	app.post('/consultant/recommendation', consultantRequireAuth, ConsultantController.saveRecommendation);
 	
 	app.put('/consultant/recommendation/push', consultantRequireAuth, ConsultantController.pushRecommendation);
