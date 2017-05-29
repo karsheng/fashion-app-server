@@ -3,7 +3,8 @@ const request = require('supertest');
 const app = require('../../app');
 const CreateConsultant = require('../create_consultant_helper');
 
-describe.only('Consultant Controller Profile', function() {
+describe('Consultant Controller Profile', function() {
+	this.timeout(15000);
 	var consultant;
 
 	beforeEach(done => {
@@ -24,4 +25,22 @@ describe.only('Consultant Controller Profile', function() {
 				done();		
 			});
 	});
+
+	it('/GET to /consultant/profile/:consultant_id returns consultant profile info', done => {
+		request(app)
+			.put('/consultant/profile')
+			.send({ description: 'I am super consultant!'})
+			.set('consultant-authorization', consultant.token)
+			.end(() => {
+				request(app)
+					.get(`/consultant/profile/${consultant._id}`)
+					.end((err, res) => {
+						const con = res.body;
+						assert(con.profile.name === consultant.name);
+						assert(con.profile.username === consultant.username);
+						assert(con.description === 'I am super consultant!');
+						done();
+					})
+			});
+	})
 });

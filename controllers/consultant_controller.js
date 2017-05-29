@@ -39,6 +39,14 @@ module.exports = {
 		.then(result => res.send(result))
 		.catch(next);
 	},
+	getConsultantProfile(req, res, next) {
+		const { consultant_id } = req.params;
+
+		Consultant.findOne({ profile: consultant_id })
+			.populate({ path: 'profile', select: 'name username', model: 'user'})
+			.then(consultant => res.send(consultant))
+			.catch(next);
+	},
 	updateProfileDescription(req, res, next) {
 		const consultant_id = req.user._id;
 		const { description } = req.body;

@@ -11,6 +11,9 @@ const ConsultantSchema = new Schema({
 	},
 	description: {
 		type: String
+	},
+	imageUrl: {
+		type: String
 	}
 });
 
