@@ -3,12 +3,12 @@ const faker = require('faker');
 const app = require('../app');
 const ConsultantReview = require('../models/consultant-review');
 
-module.exports = (client, consultant) => {
+module.exports = (client, consultant, rating) => {
 	return new Promise((resolve, reject) => {
 		const fakeReview =  new ConsultantReview({
 				client: client._id,
 				consultant: consultant._id,
-				rating: 3,
+				rating: rating,
 				comment: faker.lorem.sentences()
 			});
 

@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const ConsultantReview = mongoose.model('consultant-review');
 const postReview = require('../post_review_helper');
 
-describe('Client Controller addItemToBag', function(done) {
+describe.only('Client Controller addItemToBag', function(done) {
 	this.timeout(20000);
 	var consultant, client;
 
@@ -25,9 +25,9 @@ describe('Client Controller addItemToBag', function(done) {
 
 	it('/GET to /reviews/:consultant_id returns all reviews on consultant', done => {
 		Promise.all([
-				postReview(client, consultant),
-				postReview(client, consultant),
-				postReview(client, consultant)
+				postReview(client, consultant, 3),
+				postReview(client, consultant, 4),
+				postReview(client, consultant, 5)
 			])
 			.then(reviews => {
 				request(app)
