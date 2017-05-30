@@ -3,6 +3,17 @@ const Recommendation = require('../models/recommendation');
 const Consultant = require('../models/consultant');
 
 module.exports = {
+	getRecommendation(req, res, next) {
+		const consultant_id = req.user._id;
+		const { rec_id } = req.params;
+
+		Recommendation
+			.findOne({ $and: [{ consultant: consultant_id }, { _id: rec_id }] })
+			.populate({ path: 'client', select: 'name username', model: 'user' })
+			.populate({ path: 'item', model: 'item' })
+			.then(rec => res.send(rec))
+			.catch(next);
+	},
 	saveRecommendation(req, res, next) {
 		const consultant_id = req.user._id;
 		const { client_id, item_id, notes } = req.body;

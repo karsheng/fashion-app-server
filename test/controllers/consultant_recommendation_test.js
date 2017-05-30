@@ -5,9 +5,13 @@ const app = require('../../app');
 
 const Item = require('../../models/item');
 const Recommendation = mongoose.model('recommendation');
+const SaveRec = require('../save_recommendation_helper');
+const PushRec = require('../push_recommendation_helper');
+const CreateItem = require('../create_item_helper');
 
-describe('Consultant controller', (suite) => {
-	var consultant, client;
+describe('Consultant controller', function() {
+	this.timeout(15000);
+	var consultant, client, item;
 	beforeEach((done) => {
 		request(app)
 			.post('/consultant/signup')
@@ -28,8 +32,30 @@ describe('Consultant controller', (suite) => {
 						username: 'joe'								
 					})
 					.end((err, res) => {
-						client = res.body;	
-						done()
+						client = res.body;
+						CreateItem()
+							.then(i => {
+								item = i;
+								done();		
+							});
+					});
+			});
+	});
+
+	it.only('GET to /consultant/recommendation/:rec_id returns specific rec', done => {
+		SaveRec(consultant, client, item, "Great Item!")
+			.then(rec_id => {
+				PushRec(consultant, rec_id)
+					.then(rec => {
+						request(app)
+							.get(`/consultant/recommendation/${rec_id}`)
+							.set('consultant-authorization', consultant.token)
+							.end((err, res) => {
+								assert(res.body._id === rec_id);
+								assert(res.body.client.name === 'Joe');
+								assert(res.body.notes === 'Great Item!');
+								done();		
+							});
 					});
 			});
 	});
