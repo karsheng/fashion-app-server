@@ -4,7 +4,7 @@ const app = require('../../app');
 const createConsultant = require('../create_consultant_helper');
 const createClient = require('../create_client_helper');
 const createItem = require('../create_item_helper');
-const saveRecommendation = require('../save_recommendation_helper.js');
+const createRecommendation = require('../create_recommendation_helper.js');
 const pushRecommendation = require('../push_recommendation_helper.js');
 const addItemToBag = require('../add_item_to_bag_helper.js');
 const faker = require('faker');
@@ -29,7 +29,7 @@ describe('Client Controller', function(done) {
 				client = results[1];
 				item = results[2];
 				note = faker.lorem.sentences();
-				saveRecommendation(consultant, client, item, note)
+				createRecommendation(consultant, client, item, note)
 					.then(rec => {
 						pushRecommendation(consultant, rec._id)
 							.then(result => {
@@ -44,8 +44,8 @@ describe('Client Controller', function(done) {
 		Promise.all([createItem(), createItem()])
 			.then(items => {
 				Promise.all([
-						saveRecommendation(consultant, client, items[0]),
-						saveRecommendation(consultant, client, items[1])
+						createRecommendation(consultant, client, items[0]),
+						createRecommendation(consultant, client, items[1])
 					])
 					.then(recs => {
 						Promise.all([

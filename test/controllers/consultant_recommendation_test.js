@@ -5,7 +5,7 @@ const app = require('../../app');
 
 const Item = require('../../models/item');
 const Recommendation = mongoose.model('recommendation');
-const SaveRec = require('../save_recommendation_helper');
+const createRec = require('../create_recommendation_helper');
 const PushRec = require('../push_recommendation_helper');
 const CreateItem = require('../create_item_helper');
 
@@ -43,7 +43,7 @@ describe('Consultant Controller Recommendation Test', function() {
 	});
 
 	it('GET to /consultant/recommendation/:rec_id returns specific rec', done => {
-		SaveRec(consultant, client, item, "Great Item!")
+		createRec(consultant, client, item, "Great Item!")
 			.then(rec => {
 				PushRec(consultant, rec._id)
 					.then(rec => {
@@ -60,8 +60,7 @@ describe('Consultant Controller Recommendation Test', function() {
 			});
 	});
 
-	// TODO
-	it('/POST to /consultant/recommendation/save/:client_id saves a recommendation to user', (done) => {
+	it('/POST to /consultant/recommendation/:client_id saves a recommendation to user', (done) => {
 		const dress = new Item({
 			name: 'Blue Dress',
 			description: 'Dark Blue Dress',
@@ -70,7 +69,7 @@ describe('Consultant Controller Recommendation Test', function() {
 		dress.save()
 			.then(() => {
 				request(app)
-					.post(`/consultant/recommendation/save/${client._id}`)	
+					.post(`/consultant/recommendation/${client._id}`)	
 					.set('consultant-authorization', consultant.token)
 					.send({
 						item_id: dress._id,

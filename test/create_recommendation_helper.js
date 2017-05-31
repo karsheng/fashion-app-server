@@ -9,7 +9,7 @@ module.exports = (consultant, client, item, notes) => {
 		};
 
 		request(app)
-			.post(`/consultant/recommendation/save/${client._id}`)
+			.post(`/consultant/recommendation/${client._id}`)
 			.set('consultant-authorization', consultant.token)
 			.send(rec)
 			.end((err, res) => {

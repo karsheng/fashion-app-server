@@ -14,7 +14,7 @@ module.exports = {
 			.then(rec => res.send(rec))
 			.catch(next);
 	},
-	saveRecommendation(req, res, next) {
+	createRecommendation(req, res, next) {
 		const consultant_id = req.user._id;
 		const { client_id } = req.params;
 		const { item_id, notes } = req.body;
