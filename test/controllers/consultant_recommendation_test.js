@@ -114,4 +114,20 @@ describe('Consultant Controller Recommendation Test', function() {
 			});		
 	});
 
+	it('DELETE to /consultant/recommendaiton/:rec_id removes a recommendation', done => {
+		createRec(consultant, client, item, "I have a feeling that this what you're looking for!")
+			.then(rec => {
+				request(app)
+					.delete(`/consultant/recommendation/${rec._id}`)
+					.set('consultant-authorization', consultant.token)
+					.end((err, res) => {
+						Recommendation.findById(res.body._id)
+							.then(rec => {
+								assert(rec === null);
+								done();		
+							});
+					});
+			});			
+	});
+
 });

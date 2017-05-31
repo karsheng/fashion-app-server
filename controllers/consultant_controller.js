@@ -49,6 +49,22 @@ module.exports = {
 			.then(rec => res.send(rec))
 			.catch(next);
 	},
+	removeRecommendation(req, res, next) {
+		const consultant_id = req.user._id;
+		const { rec_id } = req.params;
+
+		Recommendation.findOneAndRemove(
+			{ $and: 
+				[
+					{ _id: rec_id },
+					{ consultant: consultant_id },
+					{ sent: false }
+				] 
+			}
+		)
+		.then(rec => res.send(rec))
+		.catch(next);
+	},
 	pushAllRecommendations(req, res, next) {
 		const consultant_id = req.user._id;
 		const { client_id } = req.params;
