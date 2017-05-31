@@ -42,7 +42,7 @@ describe('Consultant controller', function() {
 			});
 	});
 
-	it.only('GET to /consultant/recommendation/:rec_id returns specific rec', done => {
+	it('GET to /consultant/recommendation/:rec_id returns specific rec', done => {
 		SaveRec(consultant, client, item, "Great Item!")
 			.then(rec_id => {
 				PushRec(consultant, rec_id)

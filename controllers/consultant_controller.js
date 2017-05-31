@@ -31,24 +31,31 @@ module.exports = {
 	},
 	pushAllRecommendations(req, res, next) {
 		const consultant_id = req.user._id;
-		const { client_id } = req.body;
+		const { client_id } = req.params;
 
 		const timeSent = new Date().getTime();
 		Recommendation.update(
 			{ $and: [{ client: client_id }, { consultant: consultant_id }] },
 			{ sent: true, timeSent: timeSent },
-			{ multi: true }
+			{ multi: true, new: true }
 		)
 		.then((results) => res.send(results))
 		.catch(next);	
 	},
 	pushRecommendation(req, res, next) {
-		const { rec_id } = req.body;
+		const consultant_id = req.user._id
+		const { rec_id } = req.params;
 
 		const timeSent = new Date().getTime();
-		Recommendation.findByIdAndUpdate(rec_id, { sent: true, timeSent: timeSent })
-		.then(result => res.send(result))
-		.catch(next);
+
+		Recommendation
+			.findOneAndUpdate(
+				{ _id: rec_id, consultant: consultant_id}, 
+				{ sent: true, timeSent: timeSent },
+				{ new: true }
+			)
+			.then(result => res.send(result))
+			.catch(next);
 	},
 	getConsultantProfile(req, res, next) {
 		const { consultant_id } = req.params;

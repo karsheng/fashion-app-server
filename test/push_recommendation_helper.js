@@ -5,9 +5,8 @@ module.exports = (consultant, rec_id) => {
 	return new Promise((resolve, reject) => {
 	
 		request(app)
-			.put('/consultant/recommendation/push')
+			.put(`/consultant/recommendation/push/${rec_id}`)
 			.set('consultant-authorization', consultant.token)
-			.send({ rec_id: rec_id })
 			.end((err, res) => {
 				resolve(res.body);
 			});

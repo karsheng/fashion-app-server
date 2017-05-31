@@ -66,9 +66,8 @@ describe('Consultant Controller', function() {
 				Promise.all([rec1.save(), rec2.save()])
 					.then(() => {
 						request(app)
-							.put('/consultant/recommendation/pushall')
+							.put(`/consultant/recommendation/pushall/${client._id}`)
 							.set('consultant-authorization', consultant.token)
-							.send({ client_id: client._id })
 							.end((err, res) => {
 								Recommendation.find({
 									_id: { $in: [rec1._id, rec2._id] }
@@ -82,6 +81,7 @@ describe('Consultant Controller', function() {
 					});
 			});
 	});	
+
 it('PUT to /consultant/recommendation/push change sent to true and update timeSent with sent time', done => {
 		var dress = new Item({
 			name: 'Dress',
@@ -100,9 +100,8 @@ it('PUT to /consultant/recommendation/push change sent to true and update timeSe
 				Promise.all([rec1.save()])
 					.then(() => {
 						request(app)
-							.put('/consultant/recommendation/push')
+							.put(`/consultant/recommendation/push/${rec1._id}`)
 							.set('consultant-authorization', consultant.token)
-							.send({ rec_id: rec1._id })
 							.end((err, res) => {
 								Recommendation.find({
 									_id: { $in: rec1._id }
