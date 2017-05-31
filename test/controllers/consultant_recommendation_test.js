@@ -98,4 +98,20 @@ describe('Consultant Controller Recommendation Test', function() {
 					});
 			});		
 	}); 
+
+	it('PUT to /consultant/recommendation/:rec_id updates recommendation', done => {
+		createRec(consultant, client, item, "I have a feeling that this what you're looking for!")
+			.then(rec => {
+				request(app)
+					.put(`/consultant/recommendation/${rec._id}`)
+					.set('consultant-authorization', consultant.token)
+					.send({ notes: "oh my god!"})
+					.end((err, res) => {
+						assert(res.body._id === rec._id);
+						assert(res.body.notes === 'oh my god!');
+						done();		
+					});
+			});		
+	});
+
 });

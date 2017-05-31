@@ -30,6 +30,25 @@ module.exports = {
 			.then((rec) => res.send(rec))
 			.catch(next);
 	},
+	updateRecommendation(req, res, next) {
+		const consultant_id = req.user._id;
+		const { rec_id } = req.params;
+		const { notes } = req.body;
+
+		Recommendation
+			.findOneAndUpdate(
+				{ $and: 
+					[
+						{ _id: rec_id }, 
+						{ consultant: consultant_id }
+					] 
+				},
+				{ notes: notes },
+				{ new: true }
+			)
+			.then(rec => res.send(rec))
+			.catch(next);
+	},
 	pushAllRecommendations(req, res, next) {
 		const consultant_id = req.user._id;
 		const { client_id } = req.params;
