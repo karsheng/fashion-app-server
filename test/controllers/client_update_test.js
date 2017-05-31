@@ -5,7 +5,8 @@ const app = require('../../app');
 const Client = require('../../models/client');
 const Category = require('../../models/category');
 
-describe('Updating user records', () => {
+describe('Updating user records', function() {
+	this.timeout(10000);
 	var client;
 	var hats, shoes, pants, dress;
 

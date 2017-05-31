@@ -8,7 +8,7 @@ const saveRecommendation = require('../save_recommendation_helper.js');
 const pushRecommendation = require('../push_recommendation_helper.js');
 const faker = require('faker');
 
-describe('Client Controller Get Recommendations', function(done) {
+describe('Client Controller', function(done) {
 	this.timeout(15000);
 	var consultant_1, consultant_2, consultant_3, client;
 	var item1, item2, item3, item4;
@@ -44,16 +44,16 @@ describe('Client Controller Get Recommendations', function(done) {
 					saveRecommendation(consultant_3, client, item3, note3),
 					saveRecommendation(consultant_1, client, item4, note4)
 				])
-					.then(rec_ids => {
-						rec_id1 = rec_ids[0];
-						rec_id2 = rec_ids[1];
-						rec_id3 = rec_ids[2];
-						rec_id4 = rec_ids[3];
+					.then(recs => {
+						rec_id1 = recs[0]._id;
+						rec_id2 = recs[1]._id;
+						rec_id3 = recs[2]._id;
+						rec_id4 = recs[3]._id;
 						Promise.all([
-							pushRecommendation(consultant_1, rec_ids[0]),
-							pushRecommendation(consultant_2, rec_ids[1]),
-							pushRecommendation(consultant_3, rec_ids[2]),
-							pushRecommendation(consultant_1, rec_ids[3]),
+							pushRecommendation(consultant_1, rec_id1),
+							pushRecommendation(consultant_2, rec_id2),
+							pushRecommendation(consultant_3, rec_id3),
+							pushRecommendation(consultant_1, rec_id4),
 						])
 							.then(results => {
 								done();

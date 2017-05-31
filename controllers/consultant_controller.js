@@ -16,7 +16,8 @@ module.exports = {
 	},
 	saveRecommendation(req, res, next) {
 		const consultant_id = req.user._id;
-		const { client_id, item_id, notes } = req.body;
+		const { client_id } = req.params;
+		const { item_id, notes } = req.body;
 
 		const recommendation = new Recommendation({
 			item: item_id,
@@ -26,7 +27,7 @@ module.exports = {
 		});
 
 		recommendation.save()
-			.then(() => res.send(recommendation._id))
+			.then((rec) => res.send(rec))
 			.catch(next);
 	},
 	pushAllRecommendations(req, res, next) {

@@ -11,7 +11,7 @@ const faker = require('faker');
 const mongoose = require('mongoose');
 const Bag = mongoose.model('bag');
 
-describe('Client Controller addItemToBag', function(done) {
+describe('Client Controller', function(done) {
 	this.timeout(20000);
 	var consultant, client;
 	var item;
@@ -30,10 +30,10 @@ describe('Client Controller addItemToBag', function(done) {
 				item = results[2];
 				note = faker.lorem.sentences();
 				saveRecommendation(consultant, client, item, note)
-					.then(recid => {
-						pushRecommendation(consultant, recid)
+					.then(rec => {
+						pushRecommendation(consultant, rec._id)
 							.then(result => {
-								rec_id = recid;
+								rec_id = rec._id;
 								done();
 							});
 					});
@@ -47,16 +47,16 @@ describe('Client Controller addItemToBag', function(done) {
 						saveRecommendation(consultant, client, items[0]),
 						saveRecommendation(consultant, client, items[1])
 					])
-					.then(rec_ids => {
+					.then(recs => {
 						Promise.all([
-								pushRecommendation(consultant, rec_ids[0]),
-								pushRecommendation(consultant, rec_ids[1])
+								pushRecommendation(consultant, recs[0]._id),
+								pushRecommendation(consultant, recs[1]._id)
 							])
 							.then(() => {
 								Promise.all([
 									addItemToBag(client, rec_id, 10),
-									addItemToBag(client, rec_ids[0], 25),
-									addItemToBag(client, rec_ids[1], 8)
+									addItemToBag(client, recs[0]._id, 25),
+									addItemToBag(client, recs[1]._id, 8)
 									])
 									.then(() => {
 										request(app)
@@ -71,7 +71,7 @@ describe('Client Controller addItemToBag', function(done) {
 					});
 			});
 	});
-
+	// TODO
 	it('POST to /bag adds item to bag', done => {
 		request(app)
 			.post('/bag')

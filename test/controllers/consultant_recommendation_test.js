@@ -9,7 +9,7 @@ const SaveRec = require('../save_recommendation_helper');
 const PushRec = require('../push_recommendation_helper');
 const CreateItem = require('../create_item_helper');
 
-describe('Consultant controller', function() {
+describe('Consultant Controller Recommendation Test', function() {
 	this.timeout(15000);
 	var consultant, client, item;
 	beforeEach((done) => {
@@ -44,14 +44,14 @@ describe('Consultant controller', function() {
 
 	it('GET to /consultant/recommendation/:rec_id returns specific rec', done => {
 		SaveRec(consultant, client, item, "Great Item!")
-			.then(rec_id => {
-				PushRec(consultant, rec_id)
+			.then(rec => {
+				PushRec(consultant, rec._id)
 					.then(rec => {
 						request(app)
-							.get(`/consultant/recommendation/${rec_id}`)
+							.get(`/consultant/recommendation/${rec._id}`)
 							.set('consultant-authorization', consultant.token)
 							.end((err, res) => {
-								assert(res.body._id === rec_id);
+								assert(res.body._id === rec._id);
 								assert(res.body.client.name === 'Joe');
 								assert(res.body.notes === 'Great Item!');
 								done();		
@@ -60,7 +60,8 @@ describe('Consultant controller', function() {
 			});
 	});
 
-	it('saves a recommendation to user', (done) => {
+	// TODO
+	it('/POST to /consultant/recommendation/save/:client_id saves a recommendation to user', (done) => {
 		const dress = new Item({
 			name: 'Blue Dress',
 			description: 'Dark Blue Dress',
@@ -69,15 +70,14 @@ describe('Consultant controller', function() {
 		dress.save()
 			.then(() => {
 				request(app)
-					.post('/consultant/recommendation')	
+					.post(`/consultant/recommendation/save/${client._id}`)	
 					.set('consultant-authorization', consultant.token)
 					.send({
 						item_id: dress._id,
-						client_id: client._id,
 						notes: "This looks great on you!"
 					})
-					.end((err, response) => {
-						Recommendation.findById(response.body)
+					.end((err, res) => {
+						Recommendation.findById(res.body._id)
 							.populate({
 								path: 'consultant',
 								model: 'user'
