@@ -8,10 +8,11 @@ const Recommendation = mongoose.model('recommendation');
 const createRec = require('../create_recommendation_helper');
 const PushRec = require('../push_recommendation_helper');
 const CreateItem = require('../create_item_helper');
+const CreateConsultant = require('../create_consultant_helper');
 
 describe('Consultant Controller Recommendation Test', function() {
 	this.timeout(15000);
-	var consultant, client, item;
+	var consultant, client, item, item2;
 	beforeEach((done) => {
 		request(app)
 			.post('/consultant/signup')
@@ -33,11 +34,12 @@ describe('Consultant Controller Recommendation Test', function() {
 					})
 					.end((err, res) => {
 						client = res.body;
-						CreateItem()
-							.then(i => {
-								item = i;
-								done();		
-							});
+						Promise.all([CreateItem(), CreateItem()])
+						.then(items => {
+							item = items[0];
+							item2 = items[1];
+							done();
+						});
 					});
 			});
 	});
@@ -58,6 +60,26 @@ describe('Consultant Controller Recommendation Test', function() {
 							});
 					});
 			});
+	});
+
+	it('GET to /consultant/recommendation/all/:client_id returns all recs for the particular client', done => {
+
+		CreateConsultant().then(con2 => {
+			Promise.all([
+				createRec(consultant, client, item, "Consultant rec"),
+				createRec(con2, client, item, "Shouldn't see this"),
+				createRec(consultant, client, item, "Consultant rec 2")
+			])
+			.then(recs => {
+				request(app)
+					.get(`/consultant/recommendation/all/${client._id}`)
+					.set('consultant-authorization', consultant.token)
+					.end((err, res) => {
+						assert(res.body.length === 2);
+						done();
+					});
+			});
+		});
 	});
 
 	it('/POST to /consultant/recommendation/:client_id saves a recommendation to user', (done) => {

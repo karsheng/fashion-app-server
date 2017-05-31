@@ -44,6 +44,7 @@ module.exports = function(app) {
 	app.put('/consultant/profile', consultantRequireAuth, ConsultantController.updateProfileDescription);
 
 	app.get('/consultant/recommendation/:rec_id', consultantRequireAuth, ConsultantController.getRecommendation);
+	app.get('/consultant/recommendation/all/:client_id', consultantRequireAuth, ConsultantController.getAllRecommendations);
 	app.post('/consultant/recommendation/:client_id', consultantRequireAuth, ConsultantController.createRecommendation);
 	app.put('/consultant/recommendation/:rec_id', consultantRequireAuth, ConsultantController.updateRecommendation);
 	app.delete('/consultant/recommendation/:rec_id', consultantRequireAuth, ConsultantController.removeRecommendation);

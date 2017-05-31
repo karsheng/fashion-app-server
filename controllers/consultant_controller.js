@@ -14,6 +14,22 @@ module.exports = {
 			.then(rec => res.send(rec))
 			.catch(next);
 	},
+	getAllRecommendations(req, res, next) {
+		const consultant_id = req.user._id;
+		const { client_id } = req.params;
+
+		Recommendation.find(
+			{ $and: 
+				[
+					{ consultant: consultant_id }, 
+					{ client: client_id }, 
+					{ sent: false } 
+				]
+			}
+		)
+		.then(recs => res.send(recs))
+		.catch(next);
+	},
 	createRecommendation(req, res, next) {
 		const consultant_id = req.user._id;
 		const { client_id } = req.params;
