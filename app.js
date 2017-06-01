@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const app = express();
 const router = require('./router');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 mongoose.Promise = global.Promise;
 
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV !== 'test') {
 // App Setup
 app.use(morgan('combined')); // morgan is a middleware logging framework 
 app.use(bodyParser.json({ type: '*/*' })); // parse all request to json
+app.use(cors());
 router(app);
 
 
