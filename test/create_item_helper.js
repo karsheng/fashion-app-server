@@ -8,7 +8,8 @@ module.exports = () => {
 		const fakeItem =  new Item({
 				name: faker.commerce.productName(),
 				description: faker.commerce.productAdjective(),
-				price: faker.commerce.price()
+				price: faker.commerce.price(),
+				image: [faker.image.fashion(), faker.image.fashion(), faker.image.fashion(), faker.image.fashion()]
 			});
 
 			fakeItem.save()

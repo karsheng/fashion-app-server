@@ -4,7 +4,7 @@ const Category = require('../models/category');
 const Recommendation = require('../models/recommendation');
 const Bag = require('../models/bag');
 const ConsultantReview = require('../models/consultant-review');
-
+const Item = require('../models/item');
 module.exports = {
 	updateLookingFor(req, res, next) {
 		const client_id  = req.user._id;
