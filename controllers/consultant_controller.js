@@ -128,5 +128,17 @@ module.exports = {
 		)
 		.then(result => res.send(result))
 		.catch(next);
+	},
+	saveImageUrl(req, res, next) {
+		const consultant_id = req.user._id;
+		const { imageUrl } = req.body;
+
+		Consultant.findOneAndUpdate(
+			{ profile: consultant_id },
+			{ imageUrl: imageUrl },
+			{ new: true }
+		)
+		.then(result => res.send(result))
+		.catch(next);
 	}
 };

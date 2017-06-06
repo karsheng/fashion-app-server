@@ -4,6 +4,7 @@ const app = require('../../app');
 const CreateConsultant = require('../create_consultant_helper');
 const CreateClient = require('../create_client_helper');
 const postReview = require('../post_review_helper');
+const faker = require('faker');
 
 describe('Consultant Controller Profile', function() {
 	this.timeout(15000);
@@ -58,5 +59,17 @@ describe('Consultant Controller Profile', function() {
 						done();
 					})
 			});
+	});
+
+	it('/PUT to /consultant/profile/imageUrl updates consultant imageUrl', done => {
+		request(app)
+			.put('/consultant/profile/imageUrl')
+			.send({ imageUrl: 'http://test.com/abc.jpg'})
+			.set('consultant-authorization', consultant.token)
+			.end((err, res) => {
+				const con = res.body;
+				assert(con.imageUrl === 'http://test.com/abc.jpg');
+				done();
+			})
 	});
 });

@@ -42,6 +42,7 @@ module.exports = function(app) {
 
 	app.get('/consultant/profile/:consultant_id', ConsultantController.getConsultantProfile);
 	app.put('/consultant/profile', consultantRequireAuth, ConsultantController.updateProfileDescription);
+	app.put('/consultant/profile/imageUrl', consultantRequireAuth, ConsultantController.saveImageUrl)
 
 	app.get('/consultant/recommendation/:rec_id', consultantRequireAuth, ConsultantController.getRecommendation);
 	app.get('/consultant/recommendation/all/:client_id', consultantRequireAuth, ConsultantController.getAllRecommendations);
